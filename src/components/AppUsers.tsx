@@ -20,7 +20,7 @@ export default function AppUsers() {
       password,
     };
 
-    axios.post("http://localhost:8080/gaurav/user/add",user).then((res) => {
+    axios.post("http://localhost:8080/gaurav/user/add", user).then((res) => {
       console.log("result from spring boot--->" + res.data);
       setResMessage(res.data);
     });
@@ -31,6 +31,32 @@ export default function AppUsers() {
 
   const getPassword = (e: any) => {
     setPassword(e.target.value);
+  };
+
+  const checkUser = (e: FormDataEvent) => {
+    e.preventDefault();
+
+    console.log("sign In clicked!!!!");
+    console.log("username---->" + username);
+    console.log("password---->" + password);
+
+    axios
+      .get(
+        "http://localhost:8080/gaurav/user/get/one?username=" +
+          username +
+          "&password=" +
+          password
+      )
+      .then((res) => {
+        console.log("result from spring boot--->" + res.data);
+        setResMessage(res.data);
+        if(res.data == true){
+          setResMessage("Valid User!!!")
+        }
+        if(res.data == false){
+          setResMessage("InValid Crendentials!!!")
+        }
+      });
   };
 
   return (
@@ -53,7 +79,7 @@ export default function AppUsers() {
           Sign Up
         </button>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button type="submit" className="btn btn-primary">
+        <button onClick={checkUser} type="submit" className="btn btn-primary">
           Sign In
         </button>
       </form>
